@@ -66,7 +66,7 @@ public class PicsTest {
         Multimap<String, Map<String, String>> bacnetPointsMap = bacnetPoints.getBacnetPointsMap();
         boolean csvExists = fileManager.checkDevicePicCSV();
         if(!csvExists) {
-          additionalReportAppendix = " pics.csv not found in device type directory\n";
+          additionalReportAppendix = ", pics.csv not found... Pics check cannot be performed."  ;
           skippedTestReport += additionalReportAppendix;
           this.csvFound = false;
           generateReport();
