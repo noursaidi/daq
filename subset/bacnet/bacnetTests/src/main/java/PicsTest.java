@@ -13,7 +13,7 @@ public class PicsTest {
   private BacnetValidation validator;
   private BacnetPoints bacnetPoints = new BacnetPoints();
   private String testName = "protocol.bacnet.pic";
-  private String passedTestReport = String.format("RESULT pass %s\n", testName);
+  private String passedTestReport = String.format("RESULT pass %s The devices matches the PICS\n", testName);
   private String failedTestReport = String.format("RESULT fail %s The device does not match the PICS\n", testName);
   private String skippedTestReport = String.format("RESULT skip %s ", testName);
   private String reportAppendix = "";
@@ -53,24 +53,26 @@ public class PicsTest {
 
   private void performPicsChecks() {
     try {
-      for (RemoteDevice remoteDevice : localDevice.getRemoteDevices()) {
-        
-        FileManager fileManager = new FileManager();
-        bacnetPoints.get(localDevice);
-        Multimap<String, Map<String, String>> bacnetPointsMap = bacnetPoints.getBacnetPointsMap();
-        boolean csvExists = fileManager.checkDevicePicCSV();
-        this.csvFound = csvExists;
 
-        if(csvExists && this.bacnetSupported) {
+      // File manager moved out of devices loop
+      // Currently Pics file is fixed per test
+      FileManager fileManager = new FileManager();
+      boolean csvExists = fileManager.checkDevicePicCSV();
+      this.csvFound = csvExists;
+
+      if(csvExists && this.bacnetSupported) {
+        for (RemoteDevice remoteDevice : localDevice.getRemoteDevices()) {
+          bacnetPoints.get(localDevice);
+          Multimap<String, Map<String, String>> bacnetPointsMap = bacnetPoints.getBacnetPointsMap();
           validatePics(bacnetPointsMap, fileManager);
-        } 
-
+        }
       }
+
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println("Error performing pics check: " + e.getMessage());
 
-      // Error (typically test timeout) - skip test with exception message in report
+      // Error (typically timeout) - skip test with exception message in report
       reportAppendix += "Error performing pics check: " + e.getMessage() + "\n"; 
       skippedTestReport += reportAppendix;
       generateReport();
@@ -99,9 +101,7 @@ public class PicsTest {
       }
       appendix.writeReport(additionalReportAppendix+reportAppendix);
     } else {  
-      // Test skipped - build report
-
-      // report text for errors handled the exceptions are caught
+      // report text for errors handled where the exceptions are caught
       if(!this.errorEncountered)
       {
         if(this.bacnetSupported && this.csvFound == false){
@@ -109,7 +109,7 @@ public class PicsTest {
         } else if(this.csvFound && this.bacnetSupported  == false) {
           reportAppendix = "BACnet device not found, but pics.csv found in device type directory.\n";
         } else {
-          reportAppendix = "No BACnet device found and no pics.csv found in device type directory.\n";
+          reportAppendix = "BACnet device not found and pics.csv not found in device type directory.\n";
         }
         skippedTestReport += reportAppendix;
       }
