@@ -105,11 +105,11 @@ public class PicsTest {
       if(!this.errorEncountered)
       {
         if(this.bacnetSupported && this.csvFound == false){
-          reportAppendix = "BACnet device found, but pics.csv not found in device type directory\n";
-        } else if(this.csvFound && this.bacnetSupported  == false)
-          reportAppendix = "pics.csv found in device type directory, but BACnet device not found\n";
+          reportAppendix = "BACnet device found, but pics.csv not found in device type directory.\n";
+        } else if(this.csvFound && this.bacnetSupported  == false) {
+          reportAppendix = "BACnet device not found, but pics.csv found in device type directory.\n";
         } else {
-          reportAppendix = "No BACnet device found and no pics.csv found in device type directory/n";
+          reportAppendix = "No BACnet device found and no pics.csv found in device type directory./n";
         }
         skippedTestReport += reportAppendix;
       }
