@@ -15,7 +15,7 @@ public class PicsTest {
   private String testName = "protocol.bacnet.pic";
   private String passedTestReport = String.format("RESULT pass %s\n", testName);
   private String failedTestReport = String.format("RESULT fail %s The device does not match the PICS\n", testName);
-  private String skippedTestReport = String.format("RESULT skip %s Bacnet device not found.", testName);
+  private String skippedTestReport = String.format("RESULT skip %s ", testName);
   private String reportAppendix = "";
   private String additionalReportAppendix = "";
   private Csv csv;
@@ -23,8 +23,9 @@ public class PicsTest {
   private String localIp = "";
   private String broadcastIp = "";
   boolean bacnetSupported = false;
-  boolean csvFound = true;
+  boolean csvFound = false;
   boolean verboseOutput = false;
+  boolean errorEncountered = false;
 
   public PicsTest(String localIp, String broadcastIp, boolean verboseOutput) throws Exception {
     this.localIp = localIp;
@@ -43,15 +44,9 @@ public class PicsTest {
       Thread.sleep(5000);
       System.err.println("Processing...");
       validator = new BacnetValidation(localDevice);
-      bacnetSupported = validator.checkIfBacnetSupported();
-      if (bacnetSupported) {
-        performPicsChecks();
-      } else {
-        // Results in a 'skip' result
-        reportAppendix += " Bacnet device not found... Pics check cannot be performed.\n";
-        System.out.println(reportAppendix);
-        generateReport();
-      }
+      this.bacnetSupported = validator.checkIfBacnetSupported();
+      performPicsChecks();
+      generateReport();
       connection.doTerminate();
     }
   }
@@ -59,23 +54,26 @@ public class PicsTest {
   private void performPicsChecks() {
     try {
       for (RemoteDevice remoteDevice : localDevice.getRemoteDevices()) {
+        
         FileManager fileManager = new FileManager();
         bacnetPoints.get(localDevice);
         Multimap<String, Map<String, String>> bacnetPointsMap = bacnetPoints.getBacnetPointsMap();
         boolean csvExists = fileManager.checkDevicePicCSV();
-        if(!csvExists) {
-          additionalReportAppendix = " pics.csv not found in device type directory\n";
-          skippedTestReport += additionalReportAppendix;
-          this.csvFound = false;
-          generateReport();
-          return;
-        }
-        validatePics(bacnetPointsMap, fileManager);
-        generateReport();
+        this.csvFound = csvExists
+
+        if(csvExists && this.bacnetSupported) {
+          validatePics(bacnetPointsMap, fileManager);
+        } 
+
       }
     } catch (Exception e) {
-        e.printStackTrace();
+      e.printStackTrace();
       System.err.println("Error performing pics check: " + e.getMessage());
+
+      // Error (typically test timeout) - skip test with exception message in report
+      reportAppendix += "Error performing pics check: " + "\n"; 
+      skippedTestReport += reportAppendix;
+      generateReport();
     }
   }
 
@@ -100,7 +98,24 @@ public class PicsTest {
         report.writeReport(failedTestReport);
       }
       appendix.writeReport(additionalReportAppendix+reportAppendix);
-    } else {
+    } else {  
+      // Test skipped - build report
+
+      // report text for errors handled the exceptions are caught
+      if(!this.errorEncountered)
+      {
+        if(this.bacnetSupported && this.csvFound == false){
+          reportAppendix = "BACnet device found, but pics.csv not found in device type directory\n";
+        } else if(this.csvFound && this.bacnetSupported  == false)
+          reportAppendix = "pics.csv found in device type directory, but BACnet device could" + 
+            " not be found\n";
+        } else {
+          reportAppendix = "No BACnet device found and no pics.csv found in device type directory/n";
+        }
+
+        skippedTestReport += reportAppendix;
+      }
+
       report.writeReport(skippedTestReport);
       appendix.writeReport(reportAppendix);
     }
