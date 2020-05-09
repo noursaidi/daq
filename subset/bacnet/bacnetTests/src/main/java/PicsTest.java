@@ -59,7 +59,7 @@ public class PicsTest {
         bacnetPoints.get(localDevice);
         Multimap<String, Map<String, String>> bacnetPointsMap = bacnetPoints.getBacnetPointsMap();
         boolean csvExists = fileManager.checkDevicePicCSV();
-        this.csvFound = csvExists
+        this.csvFound = csvExists;
 
         if(csvExists && this.bacnetSupported) {
           validatePics(bacnetPointsMap, fileManager);
@@ -71,7 +71,7 @@ public class PicsTest {
       System.err.println("Error performing pics check: " + e.getMessage());
 
       // Error (typically test timeout) - skip test with exception message in report
-      reportAppendix += "Error performing pics check: " + "\n"; 
+      reportAppendix += "Error performing pics check: " + e.getMessage() + "\n"; 
       skippedTestReport += reportAppendix;
       generateReport();
     }
@@ -107,12 +107,10 @@ public class PicsTest {
         if(this.bacnetSupported && this.csvFound == false){
           reportAppendix = "BACnet device found, but pics.csv not found in device type directory\n";
         } else if(this.csvFound && this.bacnetSupported  == false)
-          reportAppendix = "pics.csv found in device type directory, but BACnet device could" + 
-            " not be found\n";
+          reportAppendix = "pics.csv found in device type directory, but BACnet device not found\n";
         } else {
           reportAppendix = "No BACnet device found and no pics.csv found in device type directory/n";
         }
-
         skippedTestReport += reportAppendix;
       }
 
