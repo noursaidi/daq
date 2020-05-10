@@ -93,7 +93,7 @@ public class PicsTest {
     if (this.bacnetSupported && this.csvFound) {
       boolean testPassed = csv.getTestResult();
       String reportAppendix = csv.getTestAppendices();
-      System.out.println("reportAppendix: "+reportAppendix);
+      System.out.println("reportAppendix: " + reportAppendix);
       if (testPassed) {
         report.writeReport(passedTestReport);
       } else {
@@ -103,12 +103,14 @@ public class PicsTest {
       appendix.writeReport(additionalReportAppendix+reportAppendix);
 
     } else {  
-      if(this.errorEncountered) {
+      testReport = "";
+
+      if (this.errorEncountered) {
         // Fail the test when there is an error
         testReport = failTestReport;
         testReport += String.format("Error encountered during test: %s \n", this.errorMessage);
       } else { 
-        if(this.bacnetSupported && !this.csvFound){
+        if (this.bacnetSupported && !this.csvFound){
           testReport = skippedTestReport;
           testReport += "BACnet device found, but pics.csv not found in device type directory.\n";
         } else if(this.csvFound && !this.bacnetSupported) {
@@ -120,10 +122,10 @@ public class PicsTest {
           testReport = "BACnet device not found and pics.csv not found in device type directory.\n";
         }
 
-        reportAppendix += testReport ;
+        reportAppendix += testReport;
       }
 
-      report.writeReport(skippedTestReport);
+      report.writeReport(testReport);
       appendix.writeReport(reportAppendix);
     }
   }
