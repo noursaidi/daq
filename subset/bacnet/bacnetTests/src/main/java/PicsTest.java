@@ -107,7 +107,7 @@ public class PicsTest {
 
       if (this.errorEncountered) {
         // Fail the test when there is an error
-        testReport = failTestReport;
+        testReport = failedTestReport;
         testReport += String.format("Error encountered during test: %s \n", this.errorMessage);
       } else { 
         if (this.bacnetSupported && !this.csvFound){
@@ -115,7 +115,7 @@ public class PicsTest {
           testReport += "BACnet device found, but pics.csv not found in device type directory.\n";
         } else if(this.csvFound && !this.bacnetSupported) {
           // Test failed as expectation is there should be a BACnet device if the PICS was defined
-          testReport = failTestReport;
+          testReport = failedTestReport;
           testReport += "PICS file defined however a BACnet device was not found.\n";
         } else if(!this.csvFound && !this.bacnetSupported) {
           testReport = skippedTestReport;
