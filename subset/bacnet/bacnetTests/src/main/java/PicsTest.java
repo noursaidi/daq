@@ -14,7 +14,7 @@ public class PicsTest {
   private BacnetPoints bacnetPoints = new BacnetPoints();
   private String testName = "protocol.bacnet.pic";
   private String passedTestReport = String.format("RESULT pass %s The devices matches the PICS\n", testName);
-  private String failedTestReport = String.format("RESULT fail %s The device does not match the PICS\n", testName);
+  private String failedTestReport = String.format("RESULT fail %s ", testName);
   private String skippedTestReport = String.format("RESULT skip %s ", testName);
   private String reportAppendix = "";
   private String additionalReportAppendix = "";
@@ -26,6 +26,7 @@ public class PicsTest {
   boolean csvFound = false;
   boolean verboseOutput = false;
   boolean errorEncountered = false;
+  private String errorMessage = "";
 
   public PicsTest(String localIp, String broadcastIp, boolean verboseOutput) throws Exception {
     this.localIp = localIp;
@@ -71,11 +72,9 @@ public class PicsTest {
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println("Error performing pics check: " + e.getMessage());
-
-      // Error (typically timeout) - skip test with exception message in report
-      reportAppendix += "Error performing pics check: " + e.getMessage() + "\n"; 
-      skippedTestReport += reportAppendix;
-      generateReport();
+      
+      this.errorEncountered = True;
+      this.errorMessage = e.getMessage();
     }
   }
 
@@ -90,6 +89,7 @@ public class PicsTest {
   private void generateReport() {
     Report report = new Report("tmp/BacnetPICSTestReport.txt");
     Report appendix = new Report("tmp/BacnetPICSTest_APPENDIX.txt");
+
     if (this.bacnetSupported && this.csvFound) {
       boolean testPassed = csv.getTestResult();
       String reportAppendix = csv.getTestAppendices();
@@ -97,21 +97,30 @@ public class PicsTest {
       if (testPassed) {
         report.writeReport(passedTestReport);
       } else {
+        failedTestReport += "The device does not match the PICS\n";
         report.writeReport(failedTestReport);
       }
       appendix.writeReport(additionalReportAppendix+reportAppendix);
+
     } else {  
-      // report text for errors handled where the exceptions are caught
-      if(!this.errorEncountered)
-      {
-        if(this.bacnetSupported && this.csvFound == false){
-          reportAppendix = "BACnet device found, but pics.csv not found in device type directory.\n";
-        } else if(this.csvFound && this.bacnetSupported  == false) {
-          reportAppendix = "BACnet device not found, but pics.csv found in device type directory.\n";
-        } else {
-          reportAppendix = "BACnet device not found and pics.csv not found in device type directory.\n";
+      if(this.errorEncountered) {
+        // Fail the test when there is an error
+        testReport = failTestReport;
+        testReport += String.format("Error encountered during test: %s \n", this.errorMessage);
+      } else { 
+        if(this.bacnetSupported && !this.csvFound){
+          testReport = skippedTestReport;
+          testReport += "BACnet device found, but pics.csv not found in device type directory.\n";
+        } else if(this.csvFound && !this.bacnetSupported) {
+          // Test failed as expectation is there should be a BACnet device if the PICS was defined
+          testReport = failTestReport;
+          testReport += "PICS file defined however a BACnet device was not found.\n";
+        } else if(!this.csvFound && !this.bacnetSupported) {
+          testReport = skippedTestReport;
+          testReport = "BACnet device not found and pics.csv not found in device type directory.\n";
         }
-        skippedTestReport += reportAppendix;
+
+        reportAppendix += testReport ;
       }
 
       report.writeReport(skippedTestReport);
