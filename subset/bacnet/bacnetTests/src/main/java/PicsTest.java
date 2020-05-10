@@ -16,6 +16,7 @@ public class PicsTest {
   private String passedTestReport = String.format("RESULT pass %s The devices matches the PICS\n", testName);
   private String failedTestReport = String.format("RESULT fail %s ", testName);
   private String skippedTestReport = String.format("RESULT skip %s ", testName);
+  private String testReport = "";
   private String reportAppendix = "";
   private String additionalReportAppendix = "";
   private Csv csv;
@@ -73,7 +74,7 @@ public class PicsTest {
       e.printStackTrace();
       System.err.println("Error performing pics check: " + e.getMessage());
       
-      this.errorEncountered = True;
+      this.errorEncountered = true;
       this.errorMessage = e.getMessage();
     }
   }
@@ -103,7 +104,6 @@ public class PicsTest {
       appendix.writeReport(additionalReportAppendix+reportAppendix);
 
     } else {  
-      testReport = "";
 
       if (this.errorEncountered) {
         // Fail the test when there is an error
