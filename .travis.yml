@@ -28,3 +28,9 @@ env:
     - DAQ_TEST=aux SHARD=3
     - DAQ_TEST=aux SHARD=4
     - DAQ_TEST=aux SHARD=5
+    - DAQ_TEST=aux SHARD=6
+    - DAQ_TEST=aux SHARD=7
+    - DAQ_TEST=aux SHARD=8
+    - DAQ_TEST=aux SHARD=9
+    - DAQ_TEST=aux SHARD=10
+    - DAQ_TEST=aux SHARD=11
