@@ -134,7 +134,7 @@ def get_scan_length(config_file):
                     scan_length = matched_length if matched_length > 0 else False
         return scan_length
     except Exception as e:
-        print(e)
+        write_report("Error encountered reading system.conf {}".format(e))
         return False
 
 def test_connection_min_send():
