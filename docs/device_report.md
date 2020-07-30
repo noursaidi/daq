@@ -56,7 +56,7 @@ Overall device result FAIL
 |---|---|---|---|---|
 |Required|1|0|0|0|
 |Recommended|2|0|0|0|
-|Other|1|2|22|2|
+|Other|3|2|22|2|
 
 |Result|Test|Category|Expectation|Notes|
 |---|---|---|---|---|
@@ -67,6 +67,8 @@ Overall device result FAIL
 |skip|cloud.udmi.state|Other|Other|No device id|
 |skip|cloud.udmi.system|Other|Other|No device id|
 |fail|connection.mac_oui|Other|Other|Manufacturer prefix not found!|
+|pass|connection.network.ntp_support|Other|Other|Using NTPv4.|
+|pass|connection.network.ntp_update|Other|Other|Device clock synchronized.|
 |skip|connection.port_duplex|Other|Other|No local IP has been set, check system config|
 |skip|connection.port_link|Other|Other|No local IP has been set, check system config|
 |skip|connection.port_speed|Other|Other|No local IP has been set, check system config|
@@ -91,15 +93,6 @@ Overall device result FAIL
 |gone|unknown.fake.llama|Other|Other||
 |gone|unknown.fake.monkey|Other|Other||
 
-
-## Module ipaddr
-
-
-#### Module Config
-
-|Attribute|Value|
-|---|---|
-|timeout_sec|300|
 
 ## Module pass
 
@@ -559,6 +552,32 @@ No additional information provided
 --------------------
 RESULT pass manual.test.travis Manual test - for testing
 
+```
+
+#### Module Config
+
+|Attribute|Value|
+|---|---|
+|enabled|True|
+
+## Module ntp
+
+
+#### Report
+
+```
+--------------------
+connection.network.ntp_support
+--------------------
+Device supports NTP version 4.
+--------------------
+RESULT pass connection.network.ntp_support Using NTPv4.
+--------------------
+connection.network.ntp_update
+--------------------
+Device synchronizes its time to the NTP server.
+--------------------
+RESULT pass connection.network.ntp_update Device clock synchronized.
 ```
 
 #### Module Config
