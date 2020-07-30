@@ -9,6 +9,10 @@ public class FileManager {
   private String csvExtension = ".csv";
   private boolean debug = false;
 
+  /**
+   * Checks if pics.csv exists
+   * @return  if pics.csv exists
+   */
   public boolean checkDevicePicCSV() {
     String csvFolder = getCSVPath();
     try { 
@@ -26,7 +30,7 @@ public class FileManager {
       }
       String errorMessage = "pics.csv not found.\n";
       System.err.println(errorMessage);
-    } catch(Exception e) {
+    } catch(Exception e) { 
       System.out.println("Error in reading " + csvName + csvExtension + " in " + csvFolder);
     }
     return false;
@@ -41,12 +45,15 @@ public class FileManager {
     return this.filePath;
   }
 
+  /**
+   * Returns absolute path to the working directory
+   */
   public String getAbsolutePath() {
     String absolutePath = "";
     String systemPath = System.getProperty("user.dir");
     System.out.println("system_path: " + systemPath);
-    String[] path_arr = systemPath.split("/");
-    for (int count = 0; count < path_arr.length; count++) {
+    String[] pathArr = systemPath.split("/");
+    for (int count = 0; count < pathArr.length; count++) {
       if (pathArr[count].equals("bacnetTests")) {
         break;
       }
@@ -55,6 +62,9 @@ public class FileManager {
     return absolutePath;
   }
 
+  /**
+   * Returns directory pics.csv is located within test container
+   */
   public String getCSVPath() {
     if (debug) {
       return "src/main/resources";
