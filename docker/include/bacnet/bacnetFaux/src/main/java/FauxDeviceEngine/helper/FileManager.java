@@ -10,7 +10,7 @@ public class FileManager {
   private boolean debug = false;
 
   /**
-   * Checks if pics.csv exists
+   * Checks if pics.csv exists.
    * @return  if pics.csv exists
    */
   public boolean checkDevicePicCSV() {
@@ -30,7 +30,7 @@ public class FileManager {
       }
       String errorMessage = "pics.csv not found.\n";
       System.err.println(errorMessage);
-    } catch(Exception e) { 
+    } catch (Exception e) { 
       System.out.println("Error in reading " + csvName + csvExtension + " in " + csvFolder);
     }
     return false;
@@ -46,7 +46,7 @@ public class FileManager {
   }
 
   /**
-   * Returns absolute path to the working directory
+   * Returns absolute path to the working directory.
    */
   public String getAbsolutePath() {
     String absolutePath = "";
