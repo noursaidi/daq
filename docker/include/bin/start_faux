@@ -126,6 +126,15 @@ if [ -n "${options[telnet]}" ]; then
     (while true; do echo Telnet `hostname`; nc -nvlt -p 23 -e `which hostname`; done) &
 fi
 
+if [ -n "${options[ssh]}" ]; then
+    echo Starting SSH server
+    /usr/local/sbin/sshd
+elif [ -n "${options[sshv1]}" ]; then
+    echo Starting SSHv1 server
+    echo 'Protocol 1' >> /usr/local/etc/sshd_config
+    /usr/local/sbin/sshd
+fi
+
 if [ -n "${options[bacnet]}" ]; then
     echo Starting bacnet loop device.
     java -cp bacnetTests/build/libs/bacnet-1.0-SNAPSHOT-all.jar \
@@ -136,9 +145,21 @@ elif [ -n "${options[bacnetfail]}" ]; then
          FauxDeviceEngine.EntryPoint $local_ip $broadcast_ip "Faux-Device-Fail.json"  &
 fi
 
-if [ -n "${options[ntp_client]}" ]; then
-    echo Starting ntp client.
-    java -jar NTPClient/build/libs/NTPClient-1.0-SNAPSHOT.jar "time.google.com" "123" "3" &
+# NTPv4 query to the NTP server learnt from DHCP.
+# NTPv3 query to the IP of time.google.com (since resolv.conf is modified by other tests)
+STATIC_NTP_SERVER=216.239.35.8
+if [ -n "${options[ntpv4]}" ]; then
+    dhcp_ntp=$(fgrep NTPSERVERS= /run/ntpdate.dhcp)
+    ntp_server=`echo $dhcp_ntp | cut -d "'" -f 2`
+    echo Transmitting NTP query to $ntp_server using NTPv4
+    java -jar NTPClient/build/libs/NTPClient-1.0-SNAPSHOT.jar $ntp_server 123 4 2 &
+    sleep 5
+elif [ -n "${options[ntpv3]}" ]; then
+    (while date; do
+    	echo Transmitting NTP query to $STATIC_NTP_SERVER using NTPv3
+    	java -jar NTPClient/build/libs/NTPClient-1.0-SNAPSHOT.jar $STATIC_NTP_SERVER 123 3 2 &
+	    sleep 5
+    done) &
 fi
 
 # ntp_pass queries the NTP server learnt from DHCP. ntp_fail sends to time.google.com
@@ -155,26 +176,21 @@ if [ -n "${options[ntp_pass]}" -o -n "${options[ntp_fail]}" ]; then
         fi
         echo Transmitting NTP query to $ntp_server
         ntpdate -q -p 1 $ntp_server
-        sleep 10
+        sleep 5
      done) &
 fi
 
 if [ -n "${options[broadcast_client]}" ]; then
-    echo Starting broatcast client.
-    cip_port=41794
+    echo Starting broadcast client.
+    port=41794
     cycle_seconds=20
     duration_seconds=360
-    python TransportClient/client.py $broadcast_ip $cip_port broadcast $duration_seconds $cycle_seconds &
+    python TransportClient/client.py $broadcast_ip $port broadcast $duration_seconds $cycle_seconds &
 fi
 
 if [ -n "${options[discover]}" ]; then
     echo Starting bacnet discover loop.
     bin/bacnet_discover loop &
-fi
-
-if [ -n "${options[curl]}" ]; then
-    echo Starting curl loop.
-    (while true; do curl -o - http://google.com; sleep 1; done) &
 fi
 
 if [ -n "${options[brute]}" ]; then
@@ -201,11 +217,22 @@ fi
 if [ -n "${options[pubber]}" ]; then
     echo Running cloud pubber tool...
     (while date; do
-	 pubber/bin/run
-	 # Do https query in case pubber is not configured, for testing port 443
-	 curl -o /dev/null https://google.com
-	 sleep 30
+         pubber/bin/run local/pubber.json
+         # Do https query in case pubber is not configured, for testing port 443
+         curl -o /dev/null https://google.com
+         sleep 30
      done) &
+fi
+
+# Periodically sends ARP packets
+if [ -z "${options[xarp]}" ]; then
+    echo Starting arp send loop.
+    (while true; do arpsend -D -e 10.20.254.254 $intf_name; sleep 2; done) &
+fi
+
+if [ -n "${options[curl]}" ]; then
+    echo Starting curl loop.
+    (while true; do curl -o - http://google.com; sleep 1; done) &
 fi
 
 conf_file=/config/start/start_faux.sh
