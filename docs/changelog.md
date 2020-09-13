@@ -1,4 +1,55 @@
 # Changelog
+* 1.9.5
+  * Increase nmap module timeout (#611)
+  * Improvements for test development debugging (#609)
+  * Add module config system logging (#607)
+* 1.9.4
+  * Feature/convert switchtests (#601)
+  * Do not infinite spawn ntp (#598)
+  * security.nmap.http test (#563)
+  * Update registrar tool for latest UDMI version (#596)
+  * Feature/vlan trigger (#588)
+  * fix gcp combine report test (#587)
+  * Adding default dns for static ip faux devices (#576)
+  * Add perodic tests (#575)
+  * security.admin.password changes (#461)
+* 1.9.0
+  * Test infrastructure cleanup (#572)
+  * Remove faux dependencies from subset directory (#567)
+  * Github actions (#558)
+  * misc updates to docs (#568)
+  * Incorporate manual test comments (#499)
+  * NTP Update (#525)
+  * Automatic build script (#557)
+* 1.8.2
+  * GRPC timeouts + usi first command wait fix. (#555)
+  * Numerous renovate bot updates.
+* 1.8.0
+  * add security.ssh.version test  (#523)
+  * Refactor UDMI to external repo (#544)
+  * Additional DHCP test part 3: IP change test (#543)
+  * Additional DHCP test part 2: Multisubnet test (#539)
+  * Additional DHCP test part 1 (#532)
+  * Support for alternate sec switch (not managed by DAQ) (#531)
+  * Add troubleshooting script (#529)
+  * Using usi in daq (#520)
+  * Use trunk rather than stack between switches (#526)
+  * NTPv4 support (#487)
+  * Feature/usi OVS switch (#521)
+* 1.7.0
+  * Add DAQ version to origin summary (#522)
+  * Add check for git version tag in Travis (#519)
+  * Minor UDMI updates for pubber keygen
+  * Update Minimum Send Test (#498)
+  * Universal Switch Interface (USI) (#496)
+* 1.6.1
+  * fix image pull in cmd/build (#503)
+* 1.6.0
+  * cloud test setup documentation (#495)
+  * Baseline for NTP tests (#494)
+  * Baseline for DNS test (#492)
+  * Add manual test summary to test report (#481)
+  * UDMI logentry schema update (#391)
 * 1.5.1
   * Fix for local-port-as-string issue (#477)
 * 1.5.0

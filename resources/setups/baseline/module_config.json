@@ -1,15 +1,16 @@
 {
   "modules": {
     "ipaddr": {
-      "timeout_sec": 300
+      "enabled": false,
+      "timeout_sec": 900,
+      "port_flap_timeout_sec": 20,
+      "dhcp_ranges": [{"start": "192.168.0.1", "end": "192.168.255.254", "prefix_length": 16}]
     },
     "pass": {
       "enabled": true
     },
     "nmap": {
-      "enabled": true
-    },
-    "macoui": {
+      "timeout_sec": 600,
       "enabled": true
     },
     "switch": {
@@ -19,6 +20,7 @@
       "enabled": true
     },
     "password": {
+      "dictionary_dir": "resources/faux",
       "enabled": true
     },
     "bacext": {

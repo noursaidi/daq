@@ -17,6 +17,9 @@
     },
     "manual": {
       "enabled": true
+    },
+    "ssh": {
+      "enabled": false
     }
   },
   "process": {
@@ -44,7 +47,7 @@
       "category": "Security",
       "expected": "Recommended"
     },
-    "manual.test.travis": {
+    "manual.test.name": {
       "required": "pass",
       "category": "Security",
       "expected": "Recommended",

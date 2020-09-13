@@ -17,6 +17,10 @@ tls alt expiredtls
 nmap
 nmap bacnet
 nmap telnet
+nmap ohttp
+ssh
+ssh ssh
+ssh sshv1
 EOF
 
 DAQ_TARGETS=aardvark,faux1,faux2 bin/docker_build force inline
@@ -36,8 +40,6 @@ cat $TEST_LIST | while read module args; do
         echo Module $module execution failed. >> $TEST_RESULTS
     fi
 done
-
-testing/run_unit_tests.sh || exit 1
 
 echo
 echo Testing complete. | tee -a $TEST_RESULTS

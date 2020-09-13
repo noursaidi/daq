@@ -24,6 +24,7 @@ DEFAULT_LIMIT = 100
 # pylint: disable=no-member
 DESCENDING = firestore.Query.DESCENDING
 
+
 def get_timestamp():
     """"Get a JSON-compatible formatted timestamp"""
     return to_timestamp(datetime.datetime.now(datetime.timezone.utc))
@@ -49,7 +50,7 @@ class GcpManager:
         self._callback_handler = callback_handler
         cred_file = self.config.get('gcp_cred')
         if not cred_file:
-            LOGGER.info('No gcp_cred filr specified in config, disabling gcp use.')
+            LOGGER.info('No gcp_cred file specified in config, disabling gcp use.')
             self._pubber = None
             self._storage = None
             self._firestore = None
@@ -263,19 +264,25 @@ class GcpManager:
         blob = self._bucket.blob(report_blob)
         return json.loads(str(blob.download_as_string(), 'utf-8'))
 
-    def get_reports_from_date_range(self, device: str, start=None, end=None, count=None):
-        """Combine test results from reports within a date range"""
+    # pylint: disable=too-many-arguments
+    def get_reports(self, device: str, start=None, end=None, count=None, daq_run_id=None):
+        """Get filtered list of reports"""
         if not self._firestore:
             LOGGER.error('Firestore not initialized.')
             return
-        LOGGER.info('Looking for reports...')
+        LOGGER.info('Looking for reports from GCP...')
         limit_count = count if count else DEFAULT_LIMIT
         origin = self._firestore.collection(u'origin').document(self._client_name).get()
         query = origin.reference.collection('runid').where('deviceId', '==', device)
         if start:
+            LOGGER.info('Limiting to start time %s', to_timestamp(start))
             query = query.where('updated', '>=', to_timestamp(start))
         if end:
+            LOGGER.info('Limiting to end time %s', to_timestamp(end))
             query = query.where('updated', '<=', to_timestamp(end))
+        if daq_run_id:
+            LOGGER.info('Limiting to DAQ run id %s', daq_run_id)
+            query = query.where('daq_run_id', '==', daq_run_id)
         runids = query.order_by(u'updated', direction=DESCENDING).limit(limit_count).stream()
         for runid in runids:
             json_report = self._get_json_report(runid)
