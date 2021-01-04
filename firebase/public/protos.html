@@ -191,13 +191,33 @@
                 </li>
               
                 <li>
+                  <a href="#DeviceReporting"><span class="badge">M</span>DeviceReporting</a>
+                </li>
+              
+                <li>
                   <a href="#Interface"><span class="badge">M</span>Interface</a>
+                </li>
+              
+                <li>
+                  <a href="#RunTrigger"><span class="badge">M</span>RunTrigger</a>
+                </li>
+              
+                <li>
+                  <a href="#SubnetSpec"><span class="badge">M</span>SubnetSpec</a>
                 </li>
               
                 <li>
                   <a href="#SwitchSetup"><span class="badge">M</span>SwitchSetup</a>
                 </li>
               
+                <li>
+                  <a href="#UsiSetup"><span class="badge">M</span>UsiSetup</a>
+                </li>
+              
+              
+                <li>
+                  <a href="#DhcpMode"><span class="badge">E</span>DhcpMode</a>
+                </li>
               
               
               
@@ -430,10 +450,10 @@
                 </tr>
               
                 <tr>
-                  <td>fail_hook</td>
+                  <td>topology_hook</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Hook for failure diagnostics. </p></td>
+                  <td><p>Hook for device topology updates. </p></td>
                 </tr>
               
                 <tr>
@@ -476,6 +496,55 @@
                   <td><a href="#int32">int32</a></td>
                   <td></td>
                   <td><p>Set time between port disconnect and host tests shutdown </p></td>
+                </tr>
+              
+                <tr>
+                  <td>usi_setup</td>
+                  <td><a href="#UsiSetup">UsiSetup</a></td>
+                  <td></td>
+                  <td><p>USI url </p></td>
+                </tr>
+              
+                <tr>
+                  <td>run_trigger</td>
+                  <td><a href="#RunTrigger">RunTrigger</a></td>
+                  <td></td>
+                  <td><p>Configures events that trigger a DAQ run </p></td>
+                </tr>
+              
+                <tr>
+                  <td>debug_mode</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>verbose output </p></td>
+                </tr>
+              
+                <tr>
+                  <td>use_console</td>
+                  <td><a href="#bool">bool</a></td>
+                  <td></td>
+                  <td><p>Drop into console mode after test </p></td>
+                </tr>
+              
+                <tr>
+                  <td>device_reporting</td>
+                  <td><a href="#DeviceReporting">DeviceReporting</a></td>
+                  <td></td>
+                  <td><p>Reporting device result </p></td>
+                </tr>
+              
+                <tr>
+                  <td>external_subnets</td>
+                  <td><a href="#SubnetSpec">SubnetSpec</a></td>
+                  <td>repeated</td>
+                  <td><p>For specifying ip subnets assigned by external DHCP server / static ips </p></td>
+                </tr>
+              
+                <tr>
+                  <td>internal_subnet</td>
+                  <td><a href="#SubnetSpec">SubnetSpec</a></td>
+                  <td></td>
+                  <td><p>IP subnet used by test hosts </p></td>
                 </tr>
               
             </tbody>
@@ -547,6 +616,30 @@
 
         
       
+        <h3 id="DeviceReporting">DeviceReporting</h3>
+        <p>Configuration for device result reporting</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>server_port</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Server port </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
         <h3 id="Interface">Interface</h3>
         <p>Information for faux containers.</p>
 
@@ -569,6 +662,68 @@
                   <td><a href="#int32">int32</a></td>
                   <td></td>
                   <td><p>Switch port for attching interface. </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="RunTrigger">RunTrigger</h3>
+        <p>Information for test vlan ranges.</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>vlan_start</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>start of vlan range </p></td>
+                </tr>
+              
+                <tr>
+                  <td>vlan_end</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>end of vlan range </p></td>
+                </tr>
+              
+                <tr>
+                  <td>egress_vlan</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>egress vlan </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+        <h3 id="SubnetSpec">SubnetSpec</h3>
+        <p>For specifying internal / external subnets information</p>
+
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>subnet</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
                 </tr>
               
             </tbody>
@@ -613,7 +768,14 @@
                   <td>lo_port</td>
                   <td><a href="#int32">int32</a></td>
                   <td></td>
-                  <td><p>Local port of open flow controller </p></td>
+                  <td><p>Local port of DAQ OpenFlow controller </p></td>
+                </tr>
+              
+                <tr>
+                  <td>alt_port</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p>Local port for an alternate OpenFlow controller </p></td>
                 </tr>
               
                 <tr>
@@ -648,7 +810,7 @@
                   <td>ext_br</td>
                   <td><a href="#string">string</a></td>
                   <td></td>
-                  <td><p>Name for external OVS bridge in liu of physical switch </p></td>
+                  <td><p>Name for external OVS bridge in lieu of physical switch </p></td>
                 </tr>
               
                 <tr>
@@ -679,7 +841,79 @@
 
         
       
+        <h3 id="UsiSetup">UsiSetup</h3>
+        <p>USI paramters</p>
 
+        
+          <table class="field-table">
+            <thead>
+              <tr><td>Field</td><td>Type</td><td>Label</td><td>Description</td></tr>
+            </thead>
+            <tbody>
+              
+                <tr>
+                  <td>url</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+                <tr>
+                  <td>rpc_timeout_sec</td>
+                  <td><a href="#int32">int32</a></td>
+                  <td></td>
+                  <td><p> </p></td>
+                </tr>
+              
+            </tbody>
+          </table>
+
+          
+
+        
+      
+
+      
+        <h3 id="DhcpMode">DhcpMode</h3>
+        <p></p>
+        <table class="enum-table">
+          <thead>
+            <tr><td>Name</td><td>Number</td><td>Description</td></tr>
+          </thead>
+          <tbody>
+            
+              <tr>
+                <td>NORMAL</td>
+                <td>0</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>STATIC_IP</td>
+                <td>1</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>EXTERNAL</td>
+                <td>2</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>LONG_RESPONSE</td>
+                <td>3</td>
+                <td><p></p></td>
+              </tr>
+            
+              <tr>
+                <td>IP_CHANGE</td>
+                <td>4</td>
+                <td><p></p></td>
+              </tr>
+            
+          </tbody>
+        </table>
       
 
       

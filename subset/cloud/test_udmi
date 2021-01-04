@@ -1,4 +1,5 @@
 #!/bin/bash -e
+
 source reporting.sh
 
 REPORT=/tmp/report.txt
@@ -7,22 +8,21 @@ LOG=/tmp/udmi.log
 # Necessary to reach gcp. Should be done by framework but this works for now.
 route add default gw $GATEWAY_IP
 
-route -n
-ping -c 2 172.217.164.106 || true
-arp -n
 ip addr
+route -n
+ping -c 2 $GATEWAY_IP
+arp -n
 
 gcp_cred=/config/inst/gcp_service_account.json
 gcp_topic=target
-schema_path=schemas/udmi
+schema_path=schema
+subscription=daq-validator-dev
 message_types="state pointset system"
 
 device_id=`jq -r .device_id /config/device/module_config.json`
 
-# Do basic network connectivity check
-cat /etc/resolv.conf
-ping -c 2 172.217.164.106
-ping -c 2 pubsub.googleapis.com
+# Enable dns for GCP lookup
+echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
 if [ "$device_id" == null ]; then
     skip="No device id"
@@ -34,7 +34,7 @@ fi
 
 if [ -n "$skip" ]; then
     echo Skipping udmi test because $skip
-    for message_type in $message_types; do
+    for message_type in provision $message_types; do
         TEST_NAME="cloud.udmi.$message_type"
         TEST_DESCRIPTION="Validates device $message_type payload."
         RESULT_AND_SUMMARY="RESULT skip $TEST_NAME $skip"
@@ -55,15 +55,30 @@ echo Using credentials from $GOOGLE_APPLICATION_CREDENTIALS
 echo Extracted project $project_id
 echo Extracted service $service_id
 echo Configured topic is $gcp_topic
-echo Configured schema is $schema_path
 echo Target device is $device_id
 echo
 
-timeout 60 validator/bin/validate $PWD/$schema_path pubsub:$gcp_topic $service_id-$HOSTNAME || true
+ACTIVATE_LOG=/config/gw/nodes/gw*/activate.log
+more $ACTIVATE_LOG | cat
+if fgrep "Processing provisioning request for device $device_id" $ACTIVATE_LOG; then
+    result=pass
+    detail="Found provisioning request"
+else
+    result=fail
+    detail="No provisioning request"
+fi
+TEST_NAME="cloud.udmi.provision"
+TEST_DESCRIPTION="Validates dynamic provisioning request"
+RESULT_AND_SUMMARY="RESULT $result $TEST_NAME $detail"
+write_out_result $REPORT "$TEST_NAME" "$TEST_DESCRIPTION" \
+                 "$skip" "$RESULT_AND_SUMMARY"
+
+
+timeout 90 validator/bin/validate $project_id $schema_path pubsub $subscription local/ || true
 
 function message_report {
     message_type=$1
-    base=validations/devices/$device_id/$message_type
+    base=out/devices/$device_id/$message_type
     ls -l $base* || true
 
     if [ -f "$base.out" ]; then
@@ -87,3 +102,7 @@ function message_report {
 for message_type in $message_types; do
     message_report $message_type
 done
+
+fgrep RESULT $REPORT
+
+echo Done with test_udmi

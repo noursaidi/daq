@@ -123,7 +123,7 @@ function handleTestResult(origin, siteName, message) {
   const deviceDoc = originDoc.collection('device').doc(message.device_id);
 
   const updates = [
-    originDoc.set({ 'updated': timestamp }),
+    originDoc.set({ 'updated': timestamp }, { merge: true }),
     siteDoc.set({ 'updated': timestamp }),
     portDoc.set({ 'updated': timestamp }),
     deviceDoc.set({ 'updated': timestamp })
@@ -147,7 +147,7 @@ function handleTestResult(origin, siteName, message) {
     }
 
     console.log('Test Result: ', timestamp, origin, siteName, message.port,
-      message.runid, message.name, message.device_id, message.state);
+        message.runid, message.daq_run_id, message.name, message.device_id, message.state);
     const runDoc = originDoc.collection('runid').doc(message.runid);
     const lastDoc = originDoc.collection('last').doc(message.name);
     const resultDoc = runDoc.collection('test').doc(message.name);
@@ -168,6 +168,7 @@ function handleTestResult(origin, siteName, message) {
       }
       return Promise.all([
         runDoc.set({ 'updated': timestamp,
+                     'daq_run_id': message.daq_run_id,
                      'last_name': message.name
                    }, { merge: true }),
         resultDoc.set(message),
@@ -193,17 +194,22 @@ function handleTestResult(origin, siteName, message) {
 function handleHeartbeat(origin, message) {
   const timestamp = new Date().toJSON();
   const originDoc = db.collection('origin').doc(origin);
-  console.log('heartbeat', timestamp, origin)
+  console.log('heartbeat', timestamp, origin, message)
   const heartbeatDoc = originDoc.collection('runner').doc('heartbeat');
   return Promise.all([
-    originDoc.set({ 'updated': timestamp }),
+    originDoc.set({
+      'updated': timestamp,
+      'version': message.version
+    }),
     heartbeatDoc.get().then((result) => {
       const current = result.data();
-      if (!current || !current.message || current.message.timestamp < message.timestamp)
+      const defined = current && current.message && current.message.timestamp;
+      if (!defined || current.message.timestamp < message.timestamp) {
         return heartbeatDoc.set({
           'updated': timestamp,
           message
         });
+      }
     })
   ]);
 }

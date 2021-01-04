@@ -4,17 +4,12 @@ source testing/test_preamble.sh
 
 echo Topology Tests >> $TEST_RESULTS
 
-# Test the mudacl config and the test_schema to make sure they
-# make sense for tests that use them
-
 echo mudacl tests | tee -a $TEST_RESULTS
 mudacl/bin/test.sh
 echo Mudacl exit code $? | tee -a $TEST_RESULTS
-validator/bin/test_schema
-echo Validator exit code $? | tee -a $TEST_RESULTS
 
-bacnet_file=/tmp/bacnet_result.txt
-socket_file=/tmp/socket_result.txt
+bacnet_file='$TEST_ROOT/tmp/bacnet_result.txt'
+socket_file='$TEST_ROOT/tmp/socket_result.txt'
 
 MAC_BASE=9a:02:57:1e:8f
 

@@ -116,8 +116,11 @@ if [ -z "$ext_ctrl" ]; then
 else
     echo Bridging $ext_ctrl to $ctrl_bridge
     sudo ovs-vsctl add-port $ctrl_bridge $ext_ctrl
-    sudo ip addr flush dev $ext_ctrl
+    sudo ip -l 200 addr flush dev $ext_ctrl
 fi
+
+echo Warmup ping for $ext_addr
+ping -n -c 2 $ext_addr || true
 
 echo Checking external connection to $ext_addr
 if ! ping -n -c 2 $ext_addr; then

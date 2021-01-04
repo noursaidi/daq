@@ -1,0 +1,4 @@
+{
+    "name": "ping",
+    "startup_cmd": "test_ping"
+}

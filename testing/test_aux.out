@@ -1,71 +1,88 @@
 Running testing/test_aux.sh
 Aux Tests
-Lint checks
-check_style exit code 0
 RESULT pass base.startup.dhcp
 RESULT skip base.switch.ping No local IP has been set, check system config
-RESULT pass base.target.ping target reached
+RESULT pass connection.base.target_ping target reached
 RESULT pass base.startup.ntp Correct NTP server address
 RESULT skip base.startup.dns No dns traffic detected
 RESULT pass base.startup.dhcp
 RESULT skip base.switch.ping No local IP has been set, check system config
-RESULT pass base.target.ping target reached
+RESULT pass connection.base.target_ping target reached
 RESULT fail base.startup.ntp Invalid NTP server address
 RESULT fail base.startup.dns Invalid DNS server address
 RESULT pass base.startup.dhcp
 RESULT skip base.switch.ping No local IP has been set, check system config
-RESULT pass base.target.ping target reached
+RESULT pass connection.base.target_ping target reached
 RESULT skip base.startup.ntp No NTP traffic detected
 RESULT pass base.startup.dns Correct DNS server address
-RESULT skip protocol.bacnet.version Bacnet device not found.
-RESULT fail protocol.bacnet.pic PICS file defined however a BACnet device was not found.
-RESULT info protocol.bacnet.version Protocol version: 1
-RESULT skip protocol.bacnet.pic BACnet device found, but pics.csv not found in device type directory.
-RESULT info protocol.bacnet.version Protocol version: 1
-RESULT pass protocol.bacnet.pic The devices matches the PICS
-RESULT fail connection.mac_oui Manufacturer prefix not found!
-RESULT pass connection.mac_oui Manufacturer: Google found for address 3c:5a:b4:1e:8f:0a
-RESULT skip security.tls.v1 IOException unable to connect to server
-RESULT skip security.tls.v1.x509 IOException unable to connect to server
-RESULT skip security.tls.v1_2 IOException unable to connect to server
-RESULT skip security.tls.v1_2.x509 IOException unable to connect to server
-RESULT skip security.tls.v1_3 IOException unable to connect to server
-RESULT skip security.tls.v1_3.x509 IOException unable to connect to server
-RESULT fail security.tls.v1 Certificate is expired.
-RESULT fail security.tls.v1.x509 Certificate is expired.
-RESULT fail security.tls.v1_2 Certificate is expired.
-RESULT fail security.tls.v1_2.x509 Certificate is expired.
-RESULT fail security.tls.v1_3 Certificate could not be validated.
-RESULT fail security.tls.v1_3.x509 Certificate could not be validated.
-RESULT pass security.tls.v1 Certificate active for current date and public key length > 2048.
-RESULT pass security.tls.v1.x509 Certificate active for current date and public key length > 2048.
-RESULT pass security.tls.v1_2 Certificate active for current date and public key length > 2048.
-RESULT pass security.tls.v1_2.x509 Certificate active for current date and public key length > 2048.
-RESULT pass security.tls.v1_3 Certificate active for current date and public key length > 2048.
-RESULT pass security.tls.v1_3.x509 Certificate active for current date and public key length > 2048.
-RESULT skip security.passwords.http Port 80 is not open on target device.
-RESULT skip security.passwords.https Port 443 is not open on target device.
-RESULT skip security.passwords.telnet Port 23 is not open on target device.
-RESULT skip security.passwords.ssh Port 22 is not open on target device.
-RESULT fail security.passwords.http Default passwords have not been changed.
-RESULT fail security.passwords.https Default passwords have not been changed.
-RESULT fail security.passwords.telnet Default passwords have not been changed.
-RESULT fail security.passwords.ssh Default passwords have not been changed.
-RESULT pass security.passwords.http Default passwords have been changed.
-RESULT pass security.passwords.https Default passwords have been changed.
-RESULT pass security.passwords.telnet Default passwords have been changed.
-RESULT pass security.passwords.ssh Default passwords have been changed.
-RESULT skip security.firmware Could not retrieve a firmware version with nmap. Check bacnet port.
-RESULT pass security.firmware version found: ?\xFF\xFF\x19,>u\x08\x00no
-dhcp requests 1 1 0 1
-01: []
-02: ['02:macoui:TimeoutError', '02:ping:TimeoutError']
-03: []
+RESULT skip protocol.bacext.version Bacnet device not found.
+RESULT fail protocol.bacext.pic PICS file defined however a BACnet device was not found.
+RESULT pass protocol.bacext.version Protocol version: 1
+RESULT skip protocol.bacext.pic BACnet device found, but pics.csv not found in device type directory.
+RESULT pass protocol.bacext.version Protocol version: 1
+RESULT pass protocol.bacext.pic The devices matches the PICS
+RESULT skip security.tls.v1_2_client No client initiated TLS communication detected
+RESULT skip security.tls.v1_2_server IOException unable to connect to server.
+RESULT skip security.tls.v1_3_client No client initiated TLS communication detected
+RESULT skip security.tls.v1_3_server IOException unable to connect to server.
+RESULT skip security.tls.v1_server IOException unable to connect to server.
+RESULT pass security.tls.v1_2_client Client/Server completed handshake and ECDH/ECDSA supported ciphers.
+RESULT fail security.tls.v1_2_server Certificate is expired. Certificate has not been signed by a CA.
+RESULT pass security.tls.v1_3_client Client/Server completed handshake and ECDH/ECDSA supported ciphers.
+RESULT fail security.tls.v1_3_server Certificate is expired. Certificate has not been signed by a CA.
+RESULT fail security.tls.v1_server Certificate is expired. Certificate has not been signed by a CA.
+RESULT pass security.tls.v1_2_client Client/Server completed handshake and ECDH/ECDSA supported ciphers.
+RESULT fail security.tls.v1_2_server Certificate has not been signed by a CA. Cipher Valid.
+RESULT pass security.tls.v1_3_client Client/Server completed handshake and ECDH/ECDSA supported ciphers.
+RESULT fail security.tls.v1_3_server Certificate has not been signed by a CA.
+RESULT fail security.tls.v1_server Certificate has not been signed by a CA. Cipher Valid.
+RESULT skip security.password.http Port 80 not open on target device.
+RESULT skip security.password.https Port 443 not open on target device.
+RESULT skip security.password.ssh Port 22 not open on target device.
+RESULT skip security.password.telnet Port 23 not open on target device.
+RESULT fail security.password.http Was able to brute force using dictionary.
+RESULT fail security.password.https Was able to brute force using dictionary.
+RESULT fail security.password.ssh Was able to brute force using dictionary.
+RESULT fail security.password.telnet Was able to brute force using dictionary.
+RESULT pass security.password.http Was not able to brute force using dictionary.
+RESULT pass security.password.https Was not able to brute force using dictionary.
+RESULT pass security.password.ssh Was not able to brute force using dictionary.
+RESULT pass security.password.telnet Was not able to brute force using dictionary.
+RESULT skip security.discover.firmware Could not retrieve a firmware version with nmap. Check bacnet port.
+RESULT pass security.discover.firmware version found: ?\xFF\xFF\x19,>u\x08\x00no
+RESULT pass communication.network.min_send ARP packets received. Data packets were sent at a frequency of less than 5 minutes
+RESULT pass communication.network.type Broadcast packets received. Unicast packets received.
+RESULT pass ntp.network.ntp_support Using NTPv4.
+RESULT pass ntp.network.ntp_update Device clock synchronized.
+RESULT fail connection.network.mac_oui Manufacturer prefix not found!
+RESULT pass connection.network.mac_address Device MAC address is 9a:02:57:1e:8f:01
+RESULT skip dns.network.hostname_resolution Device did not send any DNS requests
+RESULT pass communication.network.min_send ARP packets received. Data packets were sent at a frequency of less than 5 minutes
+RESULT pass communication.network.type Broadcast packets received. Unicast packets received.
+RESULT fail ntp.network.ntp_support Not using NTPv4.
+RESULT fail ntp.network.ntp_update Device clock not synchronized with local NTP server.
+RESULT pass connection.network.mac_oui Manufacturer: Google found for address 3c:5a:b4:1e:8f:0b
+RESULT pass connection.network.mac_address Device MAC address is 3c:5a:b4:1e:8f:0b
+RESULT fail dns.network.hostname_resolution Device sent DNS requests to servers other than the DHCP provided server
+RESULT pass communication.network.min_send ARP packets received. Data packets were sent at a frequency of less than 5 minutes
+RESULT pass communication.network.type Broadcast packets received. Unicast packets received.
+RESULT skip ntp.network.ntp_support No NTP packets received.
+RESULT skip ntp.network.ntp_update Not enough NTP packets received.
+RESULT pass connection.network.mac_oui Manufacturer: Google found for address 3c:5a:b4:1e:8f:0a
+RESULT pass connection.network.mac_address Device MAC address is 3c:5a:b4:1e:8f:0a
+RESULT pass dns.network.hostname_resolution Device sends DNS requests and resolves host names
+dhcp requests 1 1 1 1
+3c5ab41e8f0a: []
+3c5ab41e8f0b: ['3c5ab41e8f0b:ping:TimeoutError']
+9a02571e8f01: []
 arp.txt
 dp_port_acls.yaml
 dp_sec_port_1_acl.yaml
+dp_sec_port_1_acl_augmented.yaml
 dp_sec_port_2_acl.yaml
+dp_sec_port_2_acl_augmented.yaml
 dp_sec_port_3_acl.yaml
+dp_sec_port_3_acl_augmented.yaml
 faucet.log
 faucet.yaml
 finish.out
@@ -91,10 +108,26 @@ port-01 module_config modules
     "enabled": false
   },
   "ipaddr": {
-    "timeout_sec": 300
-  },
-  "macoui": {
-    "enabled": true
+    "dhcp_ranges": [
+      {
+        "end": "192.168.255.254",
+        "prefix_length": 16,
+        "start": "192.168.0.1"
+      },
+      {
+        "end": "172.31.255.254",
+        "prefix_length": 12,
+        "start": "172.16.0.1"
+      },
+      {
+        "end": "10.255.255.254",
+        "prefix_length": 8,
+        "start": "10.0.0.1"
+      }
+    ],
+    "enabled": false,
+    "port_flap_timeout_sec": 20,
+    "timeout_sec": 0
   },
   "manual": {
     "enabled": true
@@ -103,13 +136,18 @@ port-01 module_config modules
     "enabled": true
   },
   "nmap": {
-    "enabled": true
+    "enabled": true,
+    "timeout_sec": 600
   },
   "pass": {
     "enabled": true
   },
   "password": {
+    "dictionary_dir": "resources/faux",
     "enabled": true
+  },
+  "ssh": {
+    "enabled": false
   },
   "switch": {
     "enabled": true,
@@ -118,6 +156,7 @@ port-01 module_config modules
     }
   },
   "tls": {
+    "ca_file": "CA_Faux.pem",
     "enabled": true
   },
   "typeconf": {
@@ -139,11 +178,26 @@ port-02 module_config modules
     "enabled": true
   },
   "ipaddr": {
-    "timeout_sec": 300
-  },
-  "macoui": {
-    "enabled": true,
-    "timeout_sec": 1
+    "dhcp_ranges": [
+      {
+        "end": "192.168.255.254",
+        "prefix_length": 16,
+        "start": "192.168.0.1"
+      },
+      {
+        "end": "172.31.255.254",
+        "prefix_length": 12,
+        "start": "172.16.0.1"
+      },
+      {
+        "end": "10.255.255.254",
+        "prefix_length": 8,
+        "start": "10.0.0.1"
+      }
+    ],
+    "enabled": false,
+    "port_flap_timeout_sec": 20,
+    "timeout_sec": 0
   },
   "manual": {
     "enabled": true
@@ -152,18 +206,24 @@ port-02 module_config modules
     "enabled": true
   },
   "nmap": {
-    "enabled": true
+    "enabled": true,
+    "timeout_sec": 600
   },
   "pass": {
     "enabled": false
   },
   "password": {
+    "dictionary_dir": "resources/faux",
     "enabled": true
+  },
+  "ssh": {
+    "enabled": false
   },
   "switch": {
     "enabled": true
   },
   "tls": {
+    "ca_file": "CA_Faux.pem",
     "enabled": true
   },
   "udmi": {
@@ -182,30 +242,15 @@ port-02 module_config modules
   `\.-''__.-' \ (     \_
     `'''       `\__   /\
                 ')
-Host: X.X.X.X ()	Status: Up
-Host: X.X.X.X ()	Ports: 47808/closed/udp//bacnet///	Ignored State: closed (3)
+Host: X.X.X.X () Status: Up
+Host: X.X.X.X () Ports: 47808/closed/udp//bacnet///
+Host: X.X.X.X () Status: Up
+Host: X.X.X.X () Ports: 10000/open/tcp//snet-sensor-mgmt?///
 Redacted docs diff
 No report diff
-01: ['01:ping:Exception']
-02: ['02:hold:Exception']
-03: ['03:hold:DaqException', '03:ping:ValueError']
-inst/gw01/nodes/gw01/activate.log
-inst/gw02/nodes/gw02/activate.log
-inst/gw03/nodes/gw03/activate.log
-inst/run-port-01/nodes/fail01/activate.log
-inst/run-port-01/nodes/nmap01/activate.log
-inst/run-port-01/nodes/pass01/activate.log
-inst/run-port-01/nodes/ping01/activate.log
-inst/run-port-02/nodes/fail02/activate.log
-inst/run-port-02/nodes/hold02/activate.log
-inst/run-port-02/nodes/nmap02/activate.log
-inst/run-port-02/nodes/pass02/activate.log
-inst/run-port-02/nodes/ping02/activate.log
-inst/run-port-03/nodes/fail03/activate.log
-inst/run-port-03/nodes/hold03/activate.log
-inst/run-port-03/nodes/nmap03/activate.log
-inst/run-port-03/nodes/pass03/activate.log
-inst/run-port-03/nodes/ping03/activate.log
+9a02571e8f01: ['9a02571e8f01:ping:Exception']
+9a02571e8f02: ['9a02571e8f02:hold:Exception']
+9a02571e8f03: ['9a02571e8f03:hold:DaqException', '9a02571e8f03:ping:ValueError']
 Enough port disconnects: 1
-01: ['01:hold:DaqException']
+9a02571e8f00: ['9a02571e8f00:hold:DaqException']
 Done with tests

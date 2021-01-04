@@ -12,6 +12,9 @@ protoc-gen-doc/
 firebase/public/firebase_config.js
 firebase/public/deploy_version.js
 
+# Kleudgy apparmor workaround
+binhack/tcpdump
+
 validations/
 
 \#*
@@ -21,16 +24,15 @@ validations/
 *.save
 
 # Runtime or sub-module files
-inst/
-faucet/
-forch/
-mininet/
-local/
-local_xxx
-local.old
-firebase/.firebaserc
-firebase/.firebase
-firebase/functions/package-lock.json
+/inst/
+/faucet/
+/forch/
+/udmi/
+/mininet/
+/local/
+/firebase/.firebaserc
+/firebase/.firebase
+/firebase/functions/package-lock.json
 nohup.out
 **/node_modules/
 .vscode/
