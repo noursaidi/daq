@@ -3,21 +3,6 @@
     "pass": {
       "enabled": false
     },
-    "switch": {
-      "enabled": true
-    },
-    "bacext": {
-      "enabled": true
-    },
-    "hold": {
-      "enabled": true
-    },
-    "network": {
-      "enabled": true
-    },
-    "manual": {
-      "enabled": true
-    },
     "ssh": {
       "enabled": false
     }

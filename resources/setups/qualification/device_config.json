@@ -12,10 +12,7 @@
   },
   "tests": {
     "connection.manual.comms_down": {
-      "category": "Connection",
-      "required": "pass",
-      "expected": "Required Pass",
-      "description": "Remove the network connection and confirm the device is still operational.",
+    
       "enabled": true,
       "type": "manual",
       "result": "required",   
