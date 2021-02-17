@@ -3,21 +3,15 @@
 source reporting.sh
 
 REPORT=/tmp/report.txt
-LOG=/tmp/udmi.log
+GCP_REFLECT_CONFIG_FILE=/config/inst/gcp_reflect_config.json
+GCP_REFLECT_KEY_FILE=/config/inst/gcp_reflect_key.pkcs8
 
 # Necessary to reach gcp. Should be done by framework but this works for now.
 route add default gw $GATEWAY_IP
 
-ip addr
-route -n
-ping -c 2 $GATEWAY_IP
-arp -n
-
-gcp_cred=/config/inst/gcp_service_account.json
-gcp_topic=target
 schema_path=schema
-subscription=daq-validator-dev
-message_types="state pointset system"
+timeout=60
+message_types="state_system state_pointset event_system event_pointset"
 
 device_id=`jq -r .device_id /config/device/module_config.json`
 
@@ -26,11 +20,13 @@ echo "nameserver 8.8.8.8" >> /etc/resolv.conf
 
 if [ "$device_id" == null ]; then
     skip="No device id"
-elif [ ! -f $gcp_cred ]; then
+elif [ ! -f $GCP_REFLECT_CONFIG_FILE ]; then
     skip="No credentials"
 else
     skip=
 fi
+
+ls -l /config/inst/ || true
 
 if [ -n "$skip" ]; then
     echo Skipping udmi test because $skip
@@ -44,25 +40,24 @@ if [ -n "$skip" ]; then
     exit 0
 fi
 
-project_id=`jq -r .project_id $gcp_cred`
-service_id=`jq -r .client_email $gcp_cred`
-service_id=${service_id%@*}
+project_id=`jq -r .project_id $GCP_REFLECT_CONFIG_FILE`
+registry_id=`jq -r .registry_id $GCP_REFLECT_CONFIG_FILE`
 
-export GOOGLE_APPLICATION_CREDENTIALS=$gcp_cred
 export GOOGLE_CLOUD_PROJECT=$project_id
 
-echo Using credentials from $GOOGLE_APPLICATION_CREDENTIALS
-echo Extracted project $project_id
-echo Extracted service $service_id
-echo Configured topic is $gcp_topic
 echo Target device is $device_id
+echo Extracted project $project_id
+echo Extracted registry $registry_id
 echo
+
+echo Copying key from $GCP_REFLECT_KEY_FILE
+cp $GCP_REFLECT_KEY_FILE .
 
 ACTIVATE_LOG=/config/gw/nodes/gw*/activate.log
 more $ACTIVATE_LOG | cat
 if fgrep "Processing provisioning request for device $device_id" $ACTIVATE_LOG; then
     result=pass
-    detail="Found provisioning request"
+    detail="Found provisioning request %% $device_id"
 else
     result=fail
     detail="No provisioning request"
@@ -70,11 +65,11 @@ fi
 TEST_NAME="cloud.udmi.provision"
 TEST_DESCRIPTION="Validates dynamic provisioning request"
 RESULT_AND_SUMMARY="RESULT $result $TEST_NAME $detail"
-write_out_result $REPORT "$TEST_NAME" "$TEST_DESCRIPTION" \
-                 "$skip" "$RESULT_AND_SUMMARY"
+write_out_result $REPORT "$TEST_NAME" "$TEST_DESCRIPTION" "n/a" "$RESULT_AND_SUMMARY"
 
-
-timeout 90 validator/bin/validate $project_id $schema_path pubsub $subscription local/ || true
+echo Starting base message validation run `date`
+echo validator/bin/validate $project_id $schema_path reflect $device_id local/ --
+timeout $((timeout * 2)) validator/bin/validate $project_id $schema_path reflect $device_id local/ -- || true
 
 function message_report {
     message_type=$1
@@ -84,6 +79,8 @@ function message_report {
     if [ -f "$base.out" ]; then
         result=fail
         detail=`head -n 1 $base.out`
+        echo schema failures from $base.out
+        cat $base.out
     elif [ -f "$base.json" ]; then
         result=pass
         detail="Payload successfully validated"
@@ -101,6 +98,32 @@ function message_report {
 
 for message_type in $message_types; do
     message_report $message_type
+done
+
+device_dir=out/devices/$device_id
+sequences=$(cd sequences; ls | sort)
+echo Validating sequences for $device_id: $sequences
+for sequence in $sequences; do
+    result=pass
+    validator=validator/bin/validate
+    rm -rf $device_dir
+    cmd="$validator $project_id $schema_path reflect $device_id local/ sequences/$sequence"
+    echo $cmd
+    timeout $timeout $cmd || result=fail
+    echo Validation result for $device_id against $sequence was $result
+
+    if [[ $result == pass ]]; then
+        summary="Validation successfully completed"
+    else
+        summary="Sequence validation falied"
+        more $device_dir/* | cat
+    fi
+
+    TEST_NAME="cloud.udmi.$sequence"
+    TEST_DESCRIPTION="Validates device $sequence message sequence."
+    RESULT_AND_SUMMARY="RESULT $result $TEST_NAME $summary"
+    write_out_result $REPORT "$TEST_NAME" "$TEST_DESCRIPTION" \
+                     "n/a" "$RESULT_AND_SUMMARY"
 done
 
 fgrep RESULT $REPORT

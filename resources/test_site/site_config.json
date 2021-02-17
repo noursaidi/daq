@@ -141,7 +141,7 @@
       "required": "pass",
       "expected": "Required Pass for PoE Devices"
     },
-    "cloud.udmi.pointset": {
+    "cloud.udmi.event_pointset": {
       "category": "BOS",
       "required": "pass",
       "expected": "Recommended Pass"
