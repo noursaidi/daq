@@ -31,5 +31,5 @@
     "categories": [ "Base", "Connection", "Security", "NTP", "DNS", "Communication", "Protocol", "PoE", "IoT"],
     "expected": [ "Required Pass", "Required Pass for PoE Devices", "Required Pass for BACnet Devices", "Required Pass for IoT Devices", "Recommended Pass" ]
   },
-  "include": "../../resources/setups/qualification/qualifaction_tests.json"
+  "include": "../../resources/setups/qualification/qualifcation_tests.json"
 }
