@@ -15,12 +15,14 @@ NUM_IPADDR_TEST_TIMEOUT_DEVICES=1
 
 echo Many Tests >> $TEST_RESULTS
 
+mkdir -p /local
 echo include=../config/system/default.yaml > local/system.conf
-echo site_config=../resources/test_site/site_config.json > local/system.conf
 echo monitor_scan_sec=5 >> local/system.conf
 echo switch_setup.uplink_port=$((NUM_DEVICES+1)) >> local/system.conf
 echo gcp_cred=$gcp_cred >> local/system.conf
 echo dhcp_lease_time=120s >> local/system.conf
+
+cp resources/test_site/site_config.json local/site_config.json
 
 for iface in $(seq 1 $NUM_DEVICES); do
     xdhcp=""
