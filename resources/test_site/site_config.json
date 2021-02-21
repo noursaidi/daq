@@ -16,5 +16,5 @@
     "categories": [ "Connection", "Security", "Network Time", "TLS", "Protocol", "PoE", "BOS"],
     "expected": [ "Required Pass", "Required Pass for PoE Devices", "Required Pass for BACnet Devices", "Recommended Pass"]
   },
-  "include": "../../resources/common/common_tests.json"
+  "include": "../../resources/setups/common/common_tests.json"
 }
