@@ -5,6 +5,12 @@
     },
     "ssh": {
       "enabled": false
+    },
+    "mudgee": {
+      "enabled": false
+    },
+    "bacnet": {
+      "enabled": false
     }
   },
   "process": {
