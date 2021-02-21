@@ -11,6 +11,15 @@
     },
     "bacnet": {
       "enabled": false
+    },
+    "discover": {
+      "enabled": false
+    },
+    "password": {
+      "dictionary_dir": "resources/faux"
+    },
+    "tls": {
+      "ca_file": "CA_Faux.pem"
     }
   },
   "process": {
