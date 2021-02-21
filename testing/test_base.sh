@@ -6,6 +6,7 @@ echo Base Tests >> $TEST_RESULTS
 
 rm -rf inst/tmp_site && mkdir -p inst/tmp_site
 cp resources/setups/baseline/report_template.md inst/tmp_site/
+cp resources/test_site/site_config.json ist/tmp_site/site_config.json
 
 echo Creating MUD templates...
 bin/mudacl
@@ -44,7 +45,6 @@ cat inst/run-9a02571e8f00/nodes/nmap01/activate.log
 
 echo %%%%%%%%%%%%%%%%%%%%%% External switch tests | tee -a $TEST_RESULTS
 echo 'include: ../config/system/ext.yaml' > local/system.yaml
-echo 'site_config: ../resources/test_site/site_config.json' > local/system.yaml
 cmd/run -s
 cat inst/result.log | tee -a $TEST_RESULTS
 fgrep dp_id inst/faucet.yaml | tee -a $TEST_RESULTS
@@ -55,7 +55,6 @@ echo switch ping $count | tee -a $TEST_RESULTS
 
 echo %%%%%%%%%%%%%%%%%%%%%% Alt switch tests | tee -a $TEST_RESULTS
 echo 'include: ../config/system/alt.yaml' > local/system.yaml
-echo 'site_config: ../resources/test_site/site_config.json' > local/system.yaml
 cmd/faucet
 
 timeout 1200s cmd/run -s
