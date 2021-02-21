@@ -28,8 +28,8 @@
   },
   "report": {
     "results": [ "pass", "fail", "skip" ],
-    "categories": [ "Connection", "Security", "Network Time", "TLS", "Protocol", "PoE", "BOS"],
-    "expected": [ "Required Pass", "Required Pass for PoE Devices", "Required Pass for BACnet Devices", "Recommended Pass"]
+    "categories": [ "Base", "Connection", "Security", "NTP", "DNS", "Communication", "Protocol", "PoE", "IoT"],
+    "expected": [ "Required Pass", "Required Pass for PoE Devices", "Required Pass for BACnet Devices", "Required Pass for IoT Devices", "Recommended Pass" ]
   },
-  "include": "../../resources/setups/common/common_tests.json"
+  "include": "../../resources/setups/qualification/qualifaction_tests.json"
 }

@@ -16,7 +16,7 @@
 |
 | Attempt number   | 1 |
 
-## Device Identification
+## Device 
 
 | Device            | Entry              |
 |-------------------|--------------------|
@@ -71,46 +71,44 @@ Syntax: Pass / Fail / Skip
 
 |Result|Test|Category|Expectation|Notes|
 |---|---|---|---|---|
-|pass|base.startup.dhcp|Other|Other||
-|skip|base.switch.ping|Connection|Required Pass|No local IP has been set, check system config|
-|skip|cloud.udmi.event_pointset|BOS|Recommended Pass|No device id|
+|pass|base.startup.dhcp|Base|Required Pass||
+|skip|base.switch.ping|Base|Required Pass|No local IP has been set, check system config|
+|skip|cloud.udmi.event_pointset|IoT|Required Pass for IoT Devices|No device id|
 |skip|cloud.udmi.event_system|Other|Other|No device id|
 |skip|cloud.udmi.provision|Other|Other|No device id|
 |skip|cloud.udmi.state_pointset|Other|Other|No device id|
 |skip|cloud.udmi.state_system|Other|Other|No device id|
-|pass|communication.network.min_send|Other|Other|ARP packets received. Data packets were sent at a frequency of less than 5 minutes|
-|pass|communication.network.type|Other|Other|Broadcast packets received. Unicast packets received.|
+|pass|communication.network.min_send|Communication|Required Pass|ARP packets received. Data packets were sent at a frequency of less than 5 minutes|
+|pass|communication.network.type|Communication|Required Pass|Broadcast packets received. Unicast packets received.|
 |pass|connection.base.target_ping|Connection|Required Pass|target reached|
 |gone|connection.ipaddr.dhcp_disconnect|Connection|Required Pass||
 |gone|connection.ipaddr.private_address|Connection|Required Pass||
-|gone|connection.network.communication_min_send|Communication|Required Pass||
-|gone|connection.network.communication_type|Communication|Required Pass||
-|gone|connection.network.dhcp_long|Connection|Required Pass||
-|pass|connection.network.mac_address|Other|Other|Device MAC address is 9a:02:57:1e:8f:01|
+|gone|connection.network.communication_min_send|Connection|Required Pass||
+|gone|connection.network.communication_type|Connection|Required Pass||
+|pass|connection.network.mac_address|Connection|Required Pass|Device MAC address is 9a:02:57:1e:8f:01|
 |fail|connection.network.mac_oui|Connection|Required Pass|Manufacturer prefix not found!|
 |skip|connection.switch.port_duplex|Connection|Required Pass|No local IP has been set, check system config|
 |skip|connection.switch.port_link|Connection|Required Pass|No local IP has been set, check system config|
 |skip|connection.switch.port_speed|Connection|Required Pass|No local IP has been set, check system config|
-|skip|dns.network.hostname_resolution|Other|Other|Device did not send any DNS requests|
-|pass|manual.test.name|Security|Recommended Pass|Manual test - for testing|
-|pass|ntp.network.ntp_support|Network Time|Required Pass|Using NTPv4.|
-|pass|ntp.network.ntp_update|Network Time|Required Pass|Device clock synchronized.|
+|skip|dns.network.hostname_resolution|DNS|Required Pass|Device did not send any DNS requests|
+|pass|ntp.network.ntp_support|NTP|Required Pass|Using NTPv4.|
+|pass|ntp.network.ntp_update|NTP|Required Pass|Device clock synchronized.|
 |skip|poe.switch.power|PoE|Required Pass for PoE Devices|No local IP has been set, check system config|
 |fail|protocol.bacext.pic|Protocol|Required Pass for BACnet Devices|PICS file defined however a BACnet device was not found.|
 |skip|protocol.bacext.version|Protocol|Required Pass for BACnet Devices|Bacnet device not found.|
 |skip|security.discover.firmware|Security|Required Pass for BACnet Devices|Could not retrieve a firmware version with nmap. Check bacnet port.|
-|pass|security.nmap.http|Other|Other|No running http servers have been found.|
+|pass|security.nmap.http|Security|Required Pass|No running http servers have been found.|
 |pass|security.nmap.ports|Security|Required Pass|Only allowed ports found open.|
 |skip|security.password.http|Security|Required Pass|Port 80 not open on target device.|
 |skip|security.password.https|Security|Required Pass|Port 443 not open on target device.|
 |skip|security.password.ssh|Security|Required Pass|Port 22 not open on target device.|
 |skip|security.password.telnet|Security|Required Pass|Port 23 not open on target device.|
 |gone|security.ports.nmap|Security|Recommended Pass||
-|skip|security.tls.v1_2_client|Other|Other|No client initiated TLS communication detected|
-|skip|security.tls.v1_2_server|Other|Other|IOException unable to connect to server.|
-|skip|security.tls.v1_3_client|Other|Other|No client initiated TLS communication detected|
-|skip|security.tls.v1_3_server|Other|Other|IOException unable to connect to server.|
-|skip|security.tls.v1_server|Other|Other|IOException unable to connect to server.|
+|skip|security.tls.v1_2_client|Security|Required Pass|No client initiated TLS communication detected|
+|skip|security.tls.v1_2_server|Security|Required Pass|IOException unable to connect to server.|
+|skip|security.tls.v1_3_client|Security|Recommended Pass|No client initiated TLS communication detected|
+|skip|security.tls.v1_3_server|Security|Recommended Pass|IOException unable to connect to server.|
+|skip|security.tls.v1_server|Security|Required Pass|IOException unable to connect to server.|
 |gone|unknown.fake.llama|Other|Other||
 |gone|unknown.fake.monkey|Other|Other||
 
