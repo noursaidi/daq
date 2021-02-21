@@ -161,16 +161,12 @@
       "required": "pass",
       "expected": "Required Pass for PoE Devices"
     },
-<<<<<<< HEAD
-    "cloud.udmi.pointset": {
-=======
     "poe.switch.support": {
       "category": "PoE",
       "required": "info",
       "expected": "Information"
     },
     "cloud.udmi.udmi_pointset": {
->>>>>>> master
       "category": "BOS",
       "required": "pass",
       "expected": "Recommended Pass"
