@@ -48,26 +48,28 @@ Overall device result FAIL
 
 **Some tests report as GONE. Please check for possible misconfiguration**
 
-|Category|Total Tests|Result|Required Pass|Required Pass for PoE Devices|Required Pass for BACnet Devices|Recommended Pass|Other|
-|---|---|---|---|---|---|---|---|
-|Connection|9|FAIL|1/4/4|0/0/0|0/0/0|0/0/0|0/0/0|
-|Security|8|FAIL|1/0/4|0/0/0|0/0/1|1/1/0|0/0/0|
-|Network Time|2|PASS|2/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
-|TLS|0|N/A|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
-|Protocol|2|FAIL|0/0/0|0/0/0|0/1/1|0/0/0|0/0/0|
-|PoE|1|SKIP|0/0/0|0/0/1|0/0/0|0/0/0|0/0/0|
-|BOS|1|SKIP|0/0/0|0/0/0|0/0/0|0/0/1|0/0/0|
-|Other|2|GONE|0/0/0|0/0/0|0/0/0|0/0/0|0/2/0|
-|Communication|2|GONE|0/2/0|0/0/0|0/0/0|0/0/0|0/0/0|
+|Category|Total Tests|Result|Required Pass|Required Pass for PoE Devices|Required Pass for BACnet Devices|Required Pass for IoT Devices|Recommended Pass|Other|
+|---|---|---|---|---|---|---|---|---|
+|Base|2|FAIL|1/0/1|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
+|Connection|12|FAIL|3/5/4|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
+|Security|13|FAIL|2/1/7|0/0/0|0/0/1|0/0/0|0/0/2|0/0/0|
+|NTP|2|PASS|2/0/0|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
+|DNS|1|SKIP|0/0/1|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
+|Communication|2|PASS|2/0/0|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
+|Protocol|2|FAIL|0/0/0|0/0/0|0/1/1|0/0/0|0/0/0|0/0/0|
+|PoE|1|SKIP|0/0/0|0/0/1|0/0/0|0/0/0|0/0/0|0/0/0|
+|IoT|1|SKIP|0/0/0|0/0/0|0/0/0|0/0/1|0/0/0|0/0/0|
+|Other|0|N/A|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
 Syntax: Pass / Fail / Skip
 
 |Expectation|pass|fail|skip|gone|
 |---|---|---|---|---|
-|Required Pass|4|1|8|5|
+|Required Pass|10|1|13|5|
 |Required Pass for PoE Devices|0|0|1|0|
 |Required Pass for BACnet Devices|0|1|2|0|
-|Recommended Pass|1|0|1|1|
-|Other|5|0|9|2|
+|Required Pass for IoT Devices|0|0|1|0|
+|Recommended Pass|0|0|2|0|
+|Other|0|0|4|0|
 
 |Result|Test|Category|Expectation|Notes|
 |---|---|---|---|---|
@@ -83,8 +85,8 @@ Syntax: Pass / Fail / Skip
 |pass|connection.base.target_ping|Connection|Required Pass|target reached|
 |gone|connection.ipaddr.dhcp_disconnect|Connection|Required Pass||
 |gone|connection.ipaddr.private_address|Connection|Required Pass||
-|gone|connection.network.communication_min_send|Connection|Required Pass||
-|gone|connection.network.communication_type|Connection|Required Pass||
+|pass|connection.manual.comms_down|Connection|Required Pass|Manual test - Device passed this manual test|
+|skip|connection.manual.sec_eth_port|Connection|Required Pass|Manual test - Test results not inputted into module_config|
 |pass|connection.network.mac_address|Connection|Required Pass|Device MAC address is 9a:02:57:1e:8f:01|
 |fail|connection.network.mac_oui|Connection|Required Pass|Manufacturer prefix not found!|
 |skip|connection.switch.port_duplex|Connection|Required Pass|No local IP has been set, check system config|
@@ -103,7 +105,7 @@ Syntax: Pass / Fail / Skip
 |skip|security.password.https|Security|Required Pass|Port 443 not open on target device.|
 |skip|security.password.ssh|Security|Required Pass|Port 22 not open on target device.|
 |skip|security.password.telnet|Security|Required Pass|Port 23 not open on target device.|
-|gone|security.ports.nmap|Security|Recommended Pass||
+|gone|security.ssh.version|Security|Required Pass||
 |skip|security.tls.v1_2_client|Security|Required Pass|No client initiated TLS communication detected|
 |skip|security.tls.v1_2_server|Security|Required Pass|IOException unable to connect to server.|
 |skip|security.tls.v1_3_client|Security|Recommended Pass|No client initiated TLS communication detected|
@@ -281,6 +283,7 @@ RESULT skip poe.switch.power No local IP has been set, check system config
 |Attribute|Value|
 |---|---|
 |enabled|True|
+|timeout_sec|0|
 |poe|{'enabled': True}|
 
 ## Module bacext
@@ -396,6 +399,7 @@ RESULT skip security.tls.v1_server IOException unable to connect to server.
 |Attribute|Value|
 |---|---|
 |enabled|True|
+|timeout_sec|0|
 |ca_file|CA_Faux.pem|
 
 ## Module password
@@ -486,8 +490,9 @@ RESULT skip security.password.telnet Port 23 not open on target device.
 
 |Attribute|Value|
 |---|---|
-|dictionary_dir|resources/faux|
 |enabled|True|
+|timeout_sec|0|
+|dictionary_dir|resources/faux|
 
 ## Module udmi
 
@@ -555,13 +560,22 @@ RESULT skip cloud.udmi.event_pointset No device id
 
 ```
 --------------------
-manual.test.name
+connection.manual.comms_down
 --------------------
 
 --------------------
 No additional information provided
 --------------------
-RESULT pass manual.test.name Manual test - for testing
+RESULT pass connection.manual.comms_down Manual test - Device passed this manual test
+
+--------------------
+connection.manual.sec_eth_port
+--------------------
+
+--------------------
+No additional information provided
+--------------------
+RESULT skip connection.manual.sec_eth_port Manual test - Test results not inputted into module_config
 
 ```
 
