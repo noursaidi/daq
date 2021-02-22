@@ -98,6 +98,9 @@ port-01 module_config modules
   "bacext": {
     "enabled": true
   },
+  "bacnet": {
+    "enabled": false
+  },
   "brute": {
     "enabled": true
   },
@@ -132,6 +135,9 @@ port-01 module_config modules
   "manual": {
     "enabled": true
   },
+  "mudgee": {
+    "enabled": false
+  },
   "network": {
     "enabled": true
   },
@@ -144,7 +150,8 @@ port-01 module_config modules
   },
   "password": {
     "dictionary_dir": "resources/faux",
-    "enabled": true
+    "enabled": true,
+    "timeout_sec": 0
   },
   "ssh": {
     "enabled": false
@@ -153,16 +160,21 @@ port-01 module_config modules
     "enabled": true,
     "poe": {
       "enabled": true
-    }
+    },
+    "timeout_sec": 0
   },
   "tls": {
     "ca_file": "CA_Faux.pem",
-    "enabled": true
+    "enabled": true,
+    "timeout_sec": 0
   },
   "typeconf": {
     "enabled": false
   },
   "udmi": {
+    "enabled": true
+  },
+  "usi": {
     "enabled": true
   }
 }
@@ -171,8 +183,14 @@ port-02 module_config modules
   "bacext": {
     "enabled": true
   },
+  "bacnet": {
+    "enabled": false
+  },
   "brute": {
     "enabled": true
+  },
+  "discover": {
+    "enabled": false
   },
   "hold": {
     "enabled": true
@@ -202,6 +220,9 @@ port-02 module_config modules
   "manual": {
     "enabled": true
   },
+  "mudgee": {
+    "enabled": false
+  },
   "network": {
     "enabled": true
   },
@@ -214,19 +235,28 @@ port-02 module_config modules
   },
   "password": {
     "dictionary_dir": "resources/faux",
-    "enabled": true
+    "enabled": true,
+    "timeout_sec": 0
   },
   "ssh": {
     "enabled": false
   },
   "switch": {
-    "enabled": true
+    "enabled": true,
+    "poe": {
+      "enabled": true
+    },
+    "timeout_sec": 0
   },
   "tls": {
     "ca_file": "CA_Faux.pem",
-    "enabled": true
+    "enabled": true,
+    "timeout_sec": 0
   },
   "udmi": {
+    "enabled": true
+  },
+  "usi": {
     "enabled": true
   }
 }

@@ -21,9 +21,9 @@ echo switch_setup.uplink_port=$((NUM_DEVICES+1)) >> local/system.conf
 echo gcp_cred=$gcp_cred >> local/system.conf
 echo dhcp_lease_time=120s >> local/system.conf
 
-mkdir -p /local/site
+mkdir -p local/site
 cp resources/test_site/site_config.json local/site/site_config.json
-cat <<EOF > local/site/site_config.json.json
+cat <<EOF > local/site/site_config.json
     {
         "modules": {
             "discover": {

@@ -16,7 +16,7 @@
 |
 | Attempt number   | 1 |
 
-## Device 
+## Device Identification
 
 | Device            | Entry              |
 |-------------------|--------------------|
@@ -59,7 +59,7 @@ Overall device result FAIL
 |Protocol|2|FAIL|0/0/0|0/0/0|0/1/1|0/0/0|0/0/0|0/0/0|
 |PoE|1|SKIP|0/0/0|0/0/1|0/0/0|0/0/0|0/0/0|0/0/0|
 |IoT|1|SKIP|0/0/0|0/0/0|0/0/0|0/0/1|0/0/0|0/0/0|
-|Other|0|N/A|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|
+|Other|2|GONE|0/0/0|0/0/0|0/0/0|0/0/0|0/0/0|0/2/0|
 Syntax: Pass / Fail / Skip
 
 |Expectation|pass|fail|skip|gone|
@@ -69,7 +69,7 @@ Syntax: Pass / Fail / Skip
 |Required Pass for BACnet Devices|0|1|2|0|
 |Required Pass for IoT Devices|0|0|1|0|
 |Recommended Pass|0|0|2|0|
-|Other|0|0|4|0|
+|Other|0|0|4|2|
 
 |Result|Test|Category|Expectation|Notes|
 |---|---|---|---|---|
@@ -84,6 +84,8 @@ Syntax: Pass / Fail / Skip
 |pass|communication.network.type|Communication|Required Pass|Broadcast packets received. Unicast packets received.|
 |pass|connection.base.target_ping|Connection|Required Pass|target reached|
 |gone|connection.ipaddr.dhcp_disconnect|Connection|Required Pass||
+|gone|connection.ipaddr.disconnect_ip_change|Connection|Required Pass||
+|gone|connection.ipaddr.ip_change|Connection|Required Pass||
 |gone|connection.ipaddr.private_address|Connection|Required Pass||
 |pass|connection.manual.comms_down|Connection|Required Pass|Manual test - Device passed this manual test|
 |skip|connection.manual.sec_eth_port|Connection|Required Pass|Manual test - Test results not inputted into module_config|
