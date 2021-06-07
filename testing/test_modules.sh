@@ -27,6 +27,7 @@ cat > $TEST_LIST <<EOF
 ssh
 ssh ssh
 ssh sshv1
+network ntpv4dns
 EOF
 
 DAQ_TARGETS=aardvark,aardvark2,faux1,faux2 cmd/build missing inline

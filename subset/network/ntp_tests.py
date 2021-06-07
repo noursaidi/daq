@@ -2,6 +2,8 @@ from __future__ import absolute_import, division
 import sys
 import re
 import json
+
+from scapy.config import scapy_delete_temp_files
 import test_result
 from scapy.all import NTP, rdpcap, DNS
 
@@ -242,14 +244,23 @@ def test_ntp_update():
             active = TEST_DHCP
             ntp_tests[TEST_DNS].add_summary("Device not configured for NTP via DNS")
             ntp_tests[TEST_DNS].result = test_result.SKIP
-
-        if device_sync_local_server:
-            ntp_tests[active].add_summary("Device clock synchronized.")
-            ntp_tests[active].result = test_result.PASS
-        else:
+      
+        if not device_sync_local_server:
             ntp_tests[active].add_summary("Device clock not synchronized with local NTP server.")
             ntp_tests[active].result = test_result.FAIL
 
+        if device_sync_local_server:
+            # DNS and DHCP NTP currently resolve to the same IP address so
+            # ensure a device which says it's configured using DHCP does not
+            # perform DNS lookups for the NTP server
+            if (active == TEST_DHCP and dns_requests_for_hostname(NTP_SERVER_HOSTNAME,
+                capture)):
+                ntp_tests[active].add_summary("Device used DNS for NTP")
+                ntp_tests[active].result = test_result.FAiL
+            else:
+                ntp_tests[active].add_summary("Device clock synchronized.")
+                ntp_tests[active].result = test_result.PASS
+        
     ntp_tests[TEST_DHCP].write_results(report_filename)
     ntp_tests[TEST_DNS].write_results(report_filename)
 

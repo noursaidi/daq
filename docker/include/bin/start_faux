@@ -166,6 +166,13 @@ if [ -n "${options[ntpv4]}" ]; then
         java -jar NTPClient/build/libs/NTPClient-1.0-SNAPSHOT.jar $ntp_server 123 4 > ntp.log
         sleep 8
     done) &
+elif [ -n "${options[ntpv4dns]}" ]; then
+    ntp_server=ntp.daqlocal
+    echo Transmitting NTP query to $ntp_server using NTPv4
+    (while true; do
+        java -jar NTPClient/build/libs/NTPClient-1.0-SNAPSHOT.jar $ntp_server 123 4 > ntp.log
+        sleep 8
+    done) &
 elif [ -n "${options[ntpv3]}" ]; then
     STATIC_NTP_SERVER=216.239.35.8
     echo Transmitting NTP query to $STATIC_NTP_SERVER using NTPv3
