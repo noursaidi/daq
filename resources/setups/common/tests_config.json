@@ -89,9 +89,14 @@
             "required": "pass",
             "expected": "Required Pass"
         },
-        "ntp.network.ntp_update": {
+        "ntp.network.ntp_update_dhcp": {
             "category": "NTP",
-            "required": "pass",
+            "required": "notfail",
+            "expected": "Required Pass"
+        },
+        "ntp.network.ntp_update_dns": {
+            "category": "NTP",
+            "required": "notfail",
             "expected": "Required Pass"
         },
         "communication.network.min_send": {
